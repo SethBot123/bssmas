@@ -524,14 +524,14 @@ window.playerGear={
             
             applyStats:function(stats,player){
                 
-                stats.bluePollen*=1.15
-                stats.whitePollen*=1.15
-                stats.redPollen*=1.15
-                stats.defense+=0.1
+                stats.bluePollen*=5.00
+                stats.whitePollen*=5.00
+                stats.redPollen*=5.00
+                stats.defense+=5.0
 
             },
-            desc:'A hard hat that grants bonus pollen and helps prevent head injuries.<br><br>x1.15 pollen<br>+10% defense',
-            cost:['30000 honey','1 pineapple'],
+            desc:'A hard hat that grants bonus pollen and helps prevent head injuries.<br><br>x5.00 pollen<br>+50% defense',
+            cost:['100 honey'],
         },
 
         propellerHat:{
