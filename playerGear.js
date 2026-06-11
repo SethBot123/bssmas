@@ -837,9 +837,9 @@ window.playerGear={
             
             applyStats:function(stats,player){
                 
-                stats.capacity+=5000
-                stats.lootLuck*=1.15
-                stats.convertRate*=1.1
+                stats.capacity+=500000
+                stats.lootLuck*=5.
+                stats.convertRate*=2.
             },
             desc:'Attaches to your waist to expand the size of your container.<br><br>+5,000 capacity<br>x1.15 loot luck<br>x1.1 convert rate',
             cost:['14000 honey','1 sunflowerSeed'],
