@@ -841,8 +841,8 @@ window.playerGear={
                 stats.lootLuck*=5.
                 stats.convertRate*=2.
             },
-            desc:'Attaches to your waist to expand the size of your container.<br><br>+5,000 capacity<br>x1.15 loot luck<br>x1.1 convert rate',
-            cost:['14000 honey','1 sunflowerSeed'],
+            desc:'Attaches to your waist to expand the size of your container.<br><br>+500,000 capacity<br>x5.00 loot luck<br>x2.0 convert rate',
+            cost:['100 honey'],
         },
 
         beltBag:{
