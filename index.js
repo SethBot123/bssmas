@@ -608,6 +608,22 @@ function BeeSwarmSimulator(DATA){
     let hotbarSlots=document.getElementsByClassName('hotbarSlot')
     let autoHotbarButtons=document.getElementsByClassName('autoHotbarButton')
     let roboQuestMenu=document.getElementById('roboQuestMenu')
+    let redeemCodeRewards={
+        BSSMAS:{
+            honey:2500000,
+            items:{royalJelly:25,gumdrops:50,ticket:5},
+            effects:[{type:'blueBoost',amount:3},{type:'redBoost',amount:3},{type:'whiteBoost',amount:3}]
+        },
+        WELCOMEBOOST:{
+            honey:1000000,
+            items:{stinger:5,microConverter:3,fieldDice:3},
+            effects:[{type:'haste',amount:5},{type:'focus',amount:3},{type:'inspire',amount:2}]
+        },
+        SWEETSTART:{
+            honey:750000,
+            items:{gumdrops:35,royalJelly:10,honeysuckle:5}
+        }
+    }
 
     let _code=pages[0].innerHTML
 
@@ -892,7 +908,66 @@ function BeeSwarmSimulator(DATA){
                 player.autoRJSettings.gifted=!player.autoRJSettings.gifted
                 autoJellySettingsGifted.innerHTML='Require gifted: '+(player.autoRJSettings.gifted?'Yes':'No')
             }
-            
+
+            let redeemCodeInput=document.getElementById('redeemCodeInput')
+            let redeemCodeStatus=document.getElementById('redeemCodeStatus')
+            document.getElementById('redeemCodeButton').onclick=function(){
+
+                let code=redeemCodeInput.value.trim().toUpperCase()
+                let reward=redeemCodeRewards[code]
+                let setStatus=(txt,col)=>{
+                    redeemCodeStatus.textContent=txt
+                    redeemCodeStatus.style.color=col
+                }
+                
+                if(!code){
+                    setStatus('Enter a code first.','rgb(180,0,0)')
+                    return
+                }
+                
+                if(!reward){
+                    setStatus('Invalid code.','rgb(180,0,0)')
+                    return
+                }
+
+                player.extraInfo.redeemedCodes=player.extraInfo.redeemedCodes||{}
+                
+                if(player.extraInfo.redeemedCodes[code]){
+                    setStatus('Code already redeemed.','rgb(180,0,0)')
+                    return
+                }
+                
+                player.extraInfo.redeemedCodes[code]=true
+                
+                if(reward.honey) player.honey+=reward.honey
+
+                if(reward.items){
+                    for(let i in reward.items){
+                        
+                        if(items[i]) items[i].amount+=reward.items[i]
+                    }
+                }
+
+                if(reward.effects){
+                    for(let i in reward.effects){
+                        
+                        player.addEffect(reward.effects[i].type,false,false,undefined,reward.effects[i].amount)
+                    }
+                }
+
+                player.updateInventory()
+                player.addMessage('Redeemed code "'+code+'"!')
+                redeemCodeInput.value=''
+                setStatus('Code redeemed!','rgb(0,150,0)')
+            }
+            redeemCodeInput.onkeydown=function(e){
+                
+                if(e.key==='Enter'){
+                    e.preventDefault()
+                    document.getElementById('redeemCodeButton').onclick()
+                }
+            }
+             
         } else {
             
             pages[currentPage].style.display='none'
@@ -22019,7 +22094,7 @@ function BeeSwarmSimulator(DATA){
 
         out.restrictionInfo={}
         
-        out.extraInfo={beequipIds:0,enablePollenText:true,drives:{red:0,blue:0,white:0,glitched:0},freeRoboPass:0,freeStickbugPass:0}
+        out.extraInfo={beequipIds:0,enablePollenText:true,drives:{red:0,blue:0,white:0,glitched:0},freeRoboPass:0,freeStickbugPass:0,redeemedCodes:{}}
         
         out.startStickbugChallenge=()=>new Stickbug()
 
@@ -33725,7 +33800,8 @@ function BeeSwarmSimulator(DATA){
             return
         }
         
-        player.extraInfo=save.extraInfo
+        player.extraInfo=save.extraInfo||{}
+        player.extraInfo.redeemedCodes=player.extraInfo.redeemedCodes||{}
         player.honey=save.honey
         player.pollen=save.pollen
         player.currentGear=save.currentGear
